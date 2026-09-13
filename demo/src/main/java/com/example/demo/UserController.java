@@ -1,6 +1,9 @@
 package com.example.demo;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,17 +25,21 @@ public class UserController {
         return userService.getAllUsers();
     }
     @PostMapping
-    public User createUser(@RequestBody User user){
-        return userService.createUser(user);
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user){
+        User savedUser = userService.createUser(user);
+        return new  ResponseEntity<>(savedUser,HttpStatus.CREATED);
     }
+
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id){
         return userService.getUserById(id);
     }
+
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id,@RequestBody User user){
         return userService.updateUser(id, user);
     }
+
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
